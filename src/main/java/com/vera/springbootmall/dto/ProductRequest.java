@@ -11,7 +11,7 @@ public class ProductRequest {
     private String productName;
 
     @NotNull
-    private ProductCategory category;
+    private String category;
 
     @NotNull
     private String imageUrl;
@@ -33,11 +33,11 @@ public class ProductRequest {
         this.productName = productName;
     }
 
-    public ProductCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(ProductCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

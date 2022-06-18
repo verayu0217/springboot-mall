@@ -27,12 +27,37 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductRequest> createProduct(@RequestBody @Valid ProductRequest productRequest){
-      System.out.println(productRequest);
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
       Integer productId = productService.createProduct(productRequest);
       Product product = productService.getProductById(productId);
 
-      return ResponseEntity.status(HttpStatus.CREATED).body(productRequest);
+      return ResponseEntity.status(HttpStatus.CREATED).body(product);
+
+    }
+
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
+                                                 @RequestBody @Valid ProductRequest productRequest){
+        //先查詢這個商品是否存在
+        Product product = productService.getProductById(productId);
+        if(product == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        //商品若存在就更新 並將更新後數據回傳前端
+        productService.updateProduct(productId,productRequest);
+        Product updateProduct = productService.getProductById(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
+
+    }
+
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
+        //前端在意的是商品是否不存在了 只要確定商品不見即可 不需要去判斷商品是否存在再刪除
+        //因為使用者就是希望沒有這筆 點擊刪除後就只要回應說204消失不見即可
+        productService.deleteProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
 
