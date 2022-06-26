@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -16,9 +17,19 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("products")
+    public ResponseEntity<List<Product>>getProduces(){
+        List<Product> productList = productService.getProducts();
+        //實作列表型api時 不論有沒有查到數據 都要固定回傳200ok給前端
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
+
+
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId){
         Product product = productService.getProductById(productId);
+        //如果是實作查詢單筆的api 有數據才回傳200ok
+        //沒數據則回傳404 not found
         if(product != null){
             return ResponseEntity.status(HttpStatus.OK).body(product);
         }else{
