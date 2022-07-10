@@ -1,5 +1,6 @@
 package com.vera.springbootmall.controller;
 
+import com.vera.springbootmall.constant.ProductCategory;
 import com.vera.springbootmall.dto.ProductRequest;
 import com.vera.springbootmall.model.Product;
 import com.vera.springbootmall.service.ProductService;
@@ -18,8 +19,11 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("products")
-    public ResponseEntity<List<Product>>getProduces(){
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>>getProduces(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ){
+        List<Product> productList = productService.getProducts(category,search);
         //實作列表型api時 不論有沒有查到數據 都要固定回傳200ok給前端
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
