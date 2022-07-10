@@ -1,13 +1,13 @@
 package com.vera.springbootmall.dao;
 
-import com.vera.springbootmall.constant.ProductCategory;
+import com.vera.springbootmall.dto.ProductQueryParams;
 import com.vera.springbootmall.dto.ProductRequest;
 import com.vera.springbootmall.model.Product;
 
 import java.util.List;
 
 public interface ProductDao {
-    List<Product> getProducts(ProductCategory category,String search);
+    List<Product> getProducts(ProductQueryParams productQueryParams);
 
     Product getProductById(Integer productId);
 
