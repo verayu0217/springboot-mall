@@ -5,6 +5,7 @@ import com.vera.springbootmall.dto.ProductQueryParams;
 import com.vera.springbootmall.dto.ProductRequest;
 import com.vera.springbootmall.model.Product;
 import com.vera.springbootmall.service.ProductService;
+import com.vera.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("products")
-    public ResponseEntity<List<Product>>getProduces(
+    public ResponseEntity<Page<Product>>getProduces(
             //查詢條件 Filtering
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -46,9 +47,20 @@ public class ProductController {
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
 
+        //取得product list
         List<Product> productList = productService.getProducts(productQueryParams);
+
+        //取得product 總數
+        Integer total  = productService.countProduct(productQueryParams);
+
+        //分頁
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
         //實作列表型api時 不論有沒有查到數據 都要固定回傳200ok給前端
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
 
