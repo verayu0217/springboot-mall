@@ -1,5 +1,6 @@
 package com.vera.springbootmall.controller;
 
+import com.vera.springbootmall.dto.UserLoginRequest;
 import com.vera.springbootmall.dto.UserRegisterRequest;
 import com.vera.springbootmall.model.User;
 import com.vera.springbootmall.service.UserService;
@@ -24,7 +25,15 @@ public class UserController {
         Integer userId = userService.register(userRegisterRequest);
 
         User user = userService.getUserById(userId);
-
+        //Http status code:201
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+        User user =  userService.login(userLoginRequest);
+
+        //Http status code:200
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }

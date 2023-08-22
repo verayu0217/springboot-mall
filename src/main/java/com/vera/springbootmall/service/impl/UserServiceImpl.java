@@ -1,6 +1,7 @@
 package com.vera.springbootmall.service.impl;
 
 import com.vera.springbootmall.dao.UserDao;
+import com.vera.springbootmall.dto.UserLoginRequest;
 import com.vera.springbootmall.dto.UserRegisterRequest;
 import com.vera.springbootmall.model.User;
 import com.vera.springbootmall.service.UserService;
@@ -37,5 +38,25 @@ public class UserServiceImpl  implements UserService {
 
         //創建帳號
         return userDao.createUser(userRegisterRequest);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+
+        //尚未註冊的情況
+        if (user == null) {
+            log.warn("該 email {} 尚未註冊",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        //檢查資料庫中user的密碼與前端傳過來的密碼是否一樣
+        if (user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }else{
+            log.warn("email {} 的密碼不正確",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
