@@ -1,8 +1,11 @@
 package com.vera.springbootmall.dto;
 
-public class BuyItem {
+import javax.validation.constraints.NotEmpty;
 
+public class BuyItem {
+    @NotEmpty
     private Integer productId;
+    @NotEmpty
     private Integer quantity;
 
     public Integer getProductId() {

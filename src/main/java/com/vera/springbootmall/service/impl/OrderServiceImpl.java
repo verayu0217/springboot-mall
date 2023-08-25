@@ -21,9 +21,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Autowired
-    private OrderDao oderDao;
-
-    @Autowired
     private ProductDao productDao;
 
     @Transactional
@@ -32,8 +29,8 @@ public class OrderServiceImpl implements OrderService {
         int totalAmount = 0;
         List<OrderItem> orderItemList = new ArrayList<>();
 
-        for(BuyItem buyItem : createOrderRequest.getBuyItemList()){
-            Product product = productDao.getProductById(buyItem.getProductId());
+        for(BuyItem buyItem : createOrderRequest.getBuyItemList()){//for loop使用者購買的每個商品
+            Product product = productDao.getProductById(buyItem.getProductId());//根據前端傳過來productId的值先去資料庫查詢product數據
 
             //計算總價錢
             int amount = buyItem.getQuantity() *  product.getPrice();
