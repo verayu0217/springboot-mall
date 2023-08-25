@@ -41,7 +41,6 @@ public class OrderDaoImpl implements OrderDao {
 
     }
 
-
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Integer orderId) {
         //除了把order Table的數據都select出來 同時去join product Table 去取得product Table中的商品名稱、商品的圖片url(前端不會只要product id)
