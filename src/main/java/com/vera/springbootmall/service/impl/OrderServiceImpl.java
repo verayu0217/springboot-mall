@@ -5,6 +5,7 @@ import com.vera.springbootmall.dao.ProductDao;
 import com.vera.springbootmall.dao.UserDao;
 import com.vera.springbootmall.dto.BuyItem;
 import com.vera.springbootmall.dto.CreateOrderRequest;
+import com.vera.springbootmall.dto.OrderQueryParams;
 import com.vera.springbootmall.model.Order;
 import com.vera.springbootmall.model.OrderItem;
 import com.vera.springbootmall.model.Product;
@@ -34,6 +35,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        // 先取得order 再去取得orderItem 再把兩個資訊結合起來回傳給前端
+        for(Order order : orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
 
     @Override
     public Order getOrderById(Integer orderId) {
